@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,611 +5,191 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sheet cutting calculator</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&display=swap">
-
 <style>
-:root{
-  --bg:#eef1f5;
-  --surface:#fff;
-  --ink:#14213d;
-  --muted:#5b6578;
-  --line:#cfd6e2;
-  --accent:#e4572e;
-  --accent-ink:#fff;
-  --piece:#c9dcf5;
-  --piece2:#f6d3c6;
-  --grain:#5b7fb0;
-  box-sizing:border-box;
-  padding-top:env(safe-area-inset-top,0px);
-  padding-bottom:env(safe-area-inset-bottom,0px);
-  color-scheme:light
-}
-
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#0f1624;
-    --surface:#182136;
-    --ink:#e8edf7;
-    --muted:#9aa5ba;
-    --line:#2c3856;
-    --accent:#ff7a52;
-    --accent-ink:#1a1006;
-    --piece:#27456f;
-    --piece2:#6b3b2a;
-    --grain:#7fa3d6;
-    color-scheme:dark
-  }
-}
-
-:root[data-theme="dark"]{
-  --bg:#0f1624;
-  --surface:#182136;
-  --ink:#e8edf7;
-  --muted:#9aa5ba;
-  --line:#2c3856;
-  --accent:#ff7a52;
-  --accent-ink:#1a1006;
-  --piece:#27456f;
-  --piece2:#6b3b2a;
-  --grain:#7fa3d6;
-  color-scheme:dark
-}
-
+:root{--bg:#eef1f5;--surface:#fff;--ink:#14213d;--muted:#5b6578;--line:#cfd6e2;--accent:#e4572e;--accent-ink:#fff;--piece:#c9dcf5;--piece2:#f6d3c6;--grain:#5b7fb0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1624;--surface:#182136;--ink:#e8edf7;--muted:#9aa5ba;--line:#2c3856;--accent:#ff7a52;--accent-ink:#1a1006;--piece:#27456f;--piece2:#6b3b2a;--grain:#7fa3d6;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1624;--surface:#182136;--ink:#e8edf7;--muted:#9aa5ba;--line:#2c3856;--accent:#ff7a52;--accent-ink:#1a1006;--piece:#27456f;--piece2:#6b3b2a;--grain:#7fa3d6;color-scheme:dark}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
-
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--ink);
-  font-family:"Archivo",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
-  line-height:1.4
-}
-
-main{
-  max-width:1100px;
-  margin:0 auto;
-  padding:24px 16px 48px
-}
-
-h1{
-  font-size:1.6rem;
-  font-weight:800;
-  margin:0 0 6px;
-  letter-spacing:-.01em
-}
-
-.hint{
-  color:var(--muted);
-  font-size:.9rem;
-  margin:0 0 20px
-}
-
-h2{
-  font-size:1rem;
-  font-weight:800;
-  margin:4px 0 12px
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:minmax(0,380px) minmax(0,1fr);
-  gap:20px;
-  align-items:start
-}
-
-@media (max-width:760px){
-  .grid{grid-template-columns:1fr}
-}
-
-.panel{
-  background:var(--surface);
-  border:1px solid var(--line);
-  border-radius:10px;
-  padding:20px
-}
-
-label{
-  display:block;
-  font-size:.9rem;
-  font-weight:600;
-  margin:0 0 4px
-}
-
-input,select{
-  width:100%;
-  font:inherit;
-  font-size:1rem;
-  padding:10px 12px;
-  border:1px solid var(--line);
-  border-radius:6px;
-  background:var(--bg);
-  color:var(--ink);
-  margin-bottom:14px
-}
-
-input:focus-visible,select:focus-visible{
-  outline:3px solid var(--accent);
-  outline-offset:2px
-}
-
-.row{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px
-}
-
-hr{
-  border:0;
-  border-top:1px solid var(--line);
-  margin:6px 0 16px
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
-  gap:16px;
-  margin-bottom:16px
-}
-
-.stat .v{
-  font-size:2.2rem;
-  font-weight:800;
-  line-height:1;
-  font-variant-numeric:tabular-nums
-}
-
-.stat .k{
-  color:var(--muted);
-  font-size:.85rem;
-  margin-top:4px
-}
-
-.note{
-  color:var(--muted);
-  font-size:.9rem;
-  margin:0 0 14px
-}
-
-.err{
-  color:var(--accent);
-  font-weight:600
-}
-
-svg{
-  width:100%;
-  height:auto;
-  max-height:560px;
-  display:block
-}
-
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Archivo",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;line-height:1.4}
+main{max-width:1100px;margin:0 auto;padding:24px 16px 48px}
+h1{font-size:1.6rem;font-weight:800;margin:0 0 6px;letter-spacing:-.01em}
+.hint{color:var(--muted);font-size:.9rem;margin:0 0 20px}
+h2{font-size:1rem;font-weight:800;margin:4px 0 12px}
+.grid{display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:760px){.grid{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px}
+label{display:block;font-size:.9rem;font-weight:600;margin:0 0 4px}
+input,select{width:100%;font:inherit;font-size:1rem;padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);margin-bottom:14px}
+input:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+hr{border:0;border-top:1px solid var(--line);margin:6px 0 16px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:16px;margin-bottom:16px}
+.stat .v{font-size:2.2rem;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.stat .k{color:var(--muted);font-size:.85rem;margin-top:4px}
+.note{color:var(--muted);font-size:.9rem;margin:0 0 14px}
+.err{color:var(--accent);font-weight:600}
+svg{width:100%;height:auto;max-height:560px;display:block}
 .sheet{fill:var(--surface);stroke:var(--ink)}
 .usable{fill:none;stroke:var(--muted);stroke-dasharray:6 5}
 .p0{fill:var(--piece);stroke:var(--ink)}
 .p1{fill:var(--piece2);stroke:var(--ink)}
 .pat line{stroke:var(--grain);stroke-width:1}
-
-.legend{
-  display:flex;
-  gap:16px;
-  flex-wrap:wrap;
-  font-size:.85rem;
-  color:var(--muted);
-  margin-top:10px
-}
-
-.sw{
-  display:inline-block;
-  width:12px;
-  height:12px;
-  border:1px solid var(--ink);
-  vertical-align:-1px;
-  margin-right:6px
-}
-
-/* PRINT ADJUSTMENTS */
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.85rem;color:var(--muted);margin-top:10px}
+.sw{display:inline-block;width:12px;height:12px;border:1px solid var(--ink);vertical-align:-1px;margin-right:6px}
+.brand{background:#14213d;padding:calc(14px + env(safe-area-inset-top,0px)) 16px 14px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand img{height:34px;width:auto;display:block}
+.brand h1{color:#fff;margin:0;font-size:1.25rem;padding-left:16px;border-left:1px solid #3a4a6e}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .brand{background:#0a101c}}
+:root[data-theme="dark"] .brand{background:#0a101c}
+.printbtn{margin-left:auto;font:inherit;font-weight:600;padding:9px 16px;border-radius:6px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer}
+.printbtn:focus-visible{outline:3px solid #fff;outline-offset:2px}
+@page{size:A4 landscape;margin:8mm}
 @media print{
-
-  @page{
-    size:A4 landscape;
-    margin:8mm;
-  }
-
-  html,body{
-    width:100%;
-    height:auto;
-    background:#fff;
-    color:#14213d;
-    print-color-adjust:exact;
-    -webkit-print-color-adjust:exact;
-  }
-
-  main{
-    padding:6px;
-    max-width:100%;
-    width:100%;
-  }
-
-  .grid{
-    display:grid;
-    grid-template-columns:34% minmax(0,1fr);
-    gap:8px;
-    align-items:start;
-    width:100%;
-  }
-
-  .panel{
-    min-width:0;
-    padding:10px;
-    border:1px solid #cfd6e2;
-    break-inside:avoid;
-  }
-
-  /* Keep the diagram within the right panel */
-  #viz{
-    width:100%;
-    min-width:0;
-    overflow:hidden;
-    display:flex;
-    justify-content:center;
-    align-items:flex-start;
-  }
-
-  #viz svg{
-    display:block;
-    width:100%;
-    height:auto;
-    max-width:100%;
-    max-height:430px;
-    margin:0 auto;
-    object-fit:contain;
-    overflow:hidden;
-  }
-
-  h1{
-    font-size:1.4rem;
-  }
-
-  h2{
-    font-size:.9rem;
-    margin-bottom:8px;
-  }
-
-  .hint{
-    margin-bottom:10px;
-  }
-
-  .stats{
-    gap:8px;
-    margin-bottom:10px;
-    grid-template-columns:repeat(3,minmax(0,1fr));
-  }
-
-  .stat .v{
-    font-size:1.6rem;
-  }
-
-  .stat .k{
-    font-size:.7rem;
-  }
-
-  .note{
-    font-size:.8rem;
-    margin-bottom:8px;
-  }
-
-  .legend{
-    font-size:.75rem;
-    gap:8px;
-  }
-
-  input,select{
-    font-size:10px;
-    padding:6px;
-    margin-bottom:8px;
-  }
-
-  label{
-    font-size:11px;
-  }
-
-  hr{
-    margin:4px 0 10px;
-  }
+:root,:root:not([data-theme="light"]),:root[data-theme="dark"]{--bg:#fff;--surface:#fff;--ink:#14213d;--muted:#5b6578;--line:#cfd6e2;--piece:#c9dcf5;--piece2:#f6d3c6;--grain:#5b7fb0;--accent:#e4572e;padding:0;color-scheme:light}
+*{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+html,body{background:#fff;font-size:12px}
+.noprint{display:none!important}
+.brand,:root[data-theme="dark"] .brand,:root:not([data-theme="light"]) .brand{background:#14213d;padding:8px 12px}
+.brand img{height:28px}
+.brand h1{font-size:1.1rem}
+main{max-width:none;padding:8px 0 0}
+.hint{font-size:11px;margin:0 0 8px}
+.grid{grid-template-columns:260px minmax(0,1fr);gap:12px}
+.panel{padding:12px;break-inside:avoid}
+h2{margin:0 0 8px}
+label{font-size:11px;margin-bottom:2px}
+input,select{padding:5px 8px;margin-bottom:8px;font-size:12px}
+hr{margin:2px 0 10px}
+.stats{margin-bottom:8px}
+.stat .v{font-size:1.6rem}
+.note{margin-bottom:8px;font-size:11px}
+svg{max-height:100mm}
+.legend{margin-top:6px}
 }
 </style>
 </head>
-
 <body>
+<header class="brand"><img src="data:image/png;base64,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RC5VJbgJAIvI/xCR9wP4K+/9HUR0t4gspJTOUQZ9ibV2p16r1kY/a619CYDbcs6m6zoCkEspzhhTRMTu3bs3b968may1TzPGXK57MVYFW0tTVuno56zYjBQaJhwopRxjjLnOGPMk59yyClVnjEnee2FmTKdTGGOwsrICa+3Ae/9TAH6diDrNthv1RhjAzQA+B+B6InrPmppVA0f0ff9XMcYcYwwxRokxfi7G+KMppUFKiVJKlHOemdEYI8UYfYzxJ1NKt4QQUowxp5Q4pXR7COGsEMKw73s6nOU8nBKu3/Ge97wH+/fv70II/zyl9CullAtjjIsppS7GSM01qSZK9BymlP5tSknS4WOaUpqklF5T76VN4bZp+r7vXQiBYozEzO+IMZYYY68/V/q+/9chhM0hBMQYEWNsr4u+7xFCODvnfFVKqYQQWO87hBBes7KyUjNPM4tcffsYI6bTKUIIP6LXTCmlSc55knN+82Mf+9hORJyI0L59+7B79266/fbbK727nPPOvu8/k1LKKaWYcy455/f2fd/VTO06xVnDzJhMJggh/FQIQWKMJYQwrfsVY/xESukFOeel5eVlSinVYi4xMy655BKklExKaZRSektKKSj9OaXU6/8WUkpOrYVjZldKcfV/KSUXY/zlGKMozZLey49rRtI0AkE5Z7+ysoIYY5dzflUIIeecOeuRUsprHOOc83U55ytTSleklD6dc/52zpn1PldKKb3u2y9Mp9MuhLCg8bpt3dy+7xFjpMlk8ryDBw+upJSS7hvHGHMI4S9CCC8JIRyrsmCZ2a2qczAzTadT9H2/mHP+jebGOcb4iZzzYt/3fjqdgpkp50wiYnLONsbYMTMOHDhQBeIROecbY4xcSgmllEkI4fKVlZXRysqKTSlRZTrv/aoi73Q6RYwR4/F4FVNXYaxxlCqFTSkl6vveicgbdKPr+Tc5561VyObrSeoudiq8T08pFRXSkFK6Lcb4mHq9OaGun0WMcUEFcJRS+v0YYx9CWA4hxBDC7r7vH6T3YNuaY/08My8y899Np9McY0wxRs45vzznjJtvvtmrkM1OZl51llIenHPelXMWZSrJOV+k67Ztva0meGKMbjqdIqV0bkppOaVUr51SSvtzzj/ziU98oipOX5VLczplIkopPVfplVTApimlFytNrQoiqdCQloUsM9ucc33tJ1JK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" alt="Papercor"><h1>Sheet cutting calculator</h1><button class="printbtn noprint" id="print">Print / save as PDF</button></header>
 <main>
-<h1>Sheet cutting calculator</h1>
-<p class="hint">Width runs across the page, length runs down it. Sizes are in mm.</p>
-
+<p class="hint">Sizes are in mm. Enter the sheet as width × length: the last number is the grain direction, so 640 × 915 is long grain and 915 × 640 is short grain.</p>
 <div class="grid">
-
-<section class="panel" aria-label="Inputs">
-<h2>Parent sheet</h2>
-
-<div class="row">
-<div>
-<label for="sw">Width</label>
-<input id="sw" type="number" inputmode="decimal" min="0" value="640">
-</div>
-
-<div>
-<label for="sl">Length</label>
-<input id="sl" type="number" inputmode="decimal" min="0" value="900">
-</div>
-</div>
-
-<label for="grain">Grain direction</label>
-<select id="grain">
-<option value="long">Long grain</option>
-<option value="short">Short grain</option>
-</select>
-
-<hr>
-
-<h2>Cut size</h2>
-
-<div class="row">
-<div>
-<label for="cw">Width</label>
-<input id="cw" type="number" inputmode="decimal" min="0" value="210">
-</div>
-
-<div>
-<label for="cl">Length</label>
-<input id="cl" type="number" inputmode="decimal" min="0" value="297">
-</div>
-</div>
-
-<label for="cgrain">Grain required</label>
-<select id="cgrain">
-<option value="long">Long grain</option>
-<option value="short">Short grain</option>
-<option value="any">Either (no grain rule)</option>
-</select>
-
-<label for="qty">Pieces required (optional)</label>
-<input id="qty" type="number" inputmode="numeric" min="0" placeholder="e.g. 5000">
-</section>
-
-<section class="panel" aria-label="Result">
-
-<div class="stats">
-<div class="stat">
-<div class="v" id="n">0</div>
-<div class="k">pieces per sheet</div>
-</div>
-
-<div class="stat">
-<div class="v" id="waste">0%</div>
-<div class="k">waste</div>
-</div>
-
-<div class="stat">
-<div class="v" id="need">–</div>
-<div class="k">sheets needed</div>
-</div>
-</div>
-
-<p class="note" id="msg"></p>
-<div id="viz"></div>
-<div class="legend" id="legend"></div>
-
-</section>
+  <section class="panel" aria-label="Inputs">
+    <h2>Parent sheet</h2>
+    <div class="row">
+      <div><label for="sw">Width</label><input id="sw" type="number" inputmode="decimal" min="0" value="640"></div>
+      <div><label for="sl">Length</label><input id="sl" type="number" inputmode="decimal" min="0" value="900"></div>
+    </div>
+    <label for="grain">Grain direction</label>
+    <select id="grain"><option value="auto">Auto (from the last number)</option><option value="long">Long grain (override)</option><option value="short">Short grain (override)</option></select>
+    <p class="note" id="gdetect" style="margin-top:-8px"></p>
+    <hr>
+    <h2>Cut size</h2>
+    <div class="row">
+      <div><label for="cw">Width</label><input id="cw" type="number" inputmode="decimal" min="0" value="210"></div>
+      <div><label for="cl">Length</label><input id="cl" type="number" inputmode="decimal" min="0" value="297"></div>
+    </div>
+    <label for="cgrain">Grain required</label>
+    <select id="cgrain"><option value="auto">Auto (most pieces)</option><option value="long">Long grain (override)</option><option value="short">Short grain (override)</option><option value="any">Either (no grain rule)</option></select>
+    <label for="qty">Pieces required (optional)</label>
+    <input id="qty" type="number" inputmode="numeric" min="0" placeholder="e.g. 5000">
+  </section>
+  <section class="panel" aria-label="Result">
+    <div class="stats">
+      <div class="stat"><div class="v" id="n">0</div><div class="k">pieces per sheet</div></div>
+      <div class="stat"><div class="v" id="waste">0%</div><div class="k">waste</div></div>
+      <div class="stat"><div class="v" id="need">–</div><div class="k">sheets needed</div></div>
+    </div>
+    <p class="note" id="msg"></p>
+    <div id="viz"></div>
+    <div class="legend" id="legend"></div>
+  </section>
 </div>
 </main>
-
 <script>
 (function(){
-
-var $=function(id){return document.getElementById(id)};
-var E=1e-9;
-
-function num(id){
-  return parseFloat($(id).value)
-}
-
-function grid(x0,y0,W,H,o,g){
-  var out=[];
-
-  if(W<o[0]-E||H<o[1]-E)return out;
-
-  var c=Math.floor((W+g)/(o[0]+g)+E);
-  var r=Math.floor((H+g)/(o[1]+g)+E);
-
-  for(var i=0;i<c;i++)
-    for(var j=0;j<r;j++)
-      out.push({
-        x:x0+i*(o[0]+g),
-        y:y0+j*(o[1]+g),
-        w:o[0],
-        h:o[1],
-        t:o[2]
+  var $=function(id){return document.getElementById(id)};
+  var E=1e-9;
+  function num(id){return parseFloat($(id).value)}
+  function grid(x0,y0,W,H,o,g){
+    var out=[];
+    if(W<o[0]-E||H<o[1]-E)return out;
+    var c=Math.floor((W+g)/(o[0]+g)+E),r=Math.floor((H+g)/(o[1]+g)+E);
+    for(var i=0;i<c;i++)for(var j=0;j<r;j++)out.push({x:x0+i*(o[0]+g),y:y0+j*(o[1]+g),w:o[0],h:o[1],t:o[2]});
+    return out;
+  }
+  function best(W,H,os,g){
+    var c=os.map(function(o){return grid(0,0,W,H,o,g)});
+    if(os.length===2){
+      [[os[0],os[1]],[os[1],os[0]]].forEach(function(p){
+        var a=p[0],b=p[1],k,s;
+        for(k=1;k<600&&(s=k*(a[0]+g)-g)<=W+E;k++)c.push(grid(0,0,s,H,a,g).concat(grid(s+g,0,W-s-g,H,b,g)));
+        for(k=1;k<600&&(s=k*(a[1]+g)-g)<=H+E;k++)c.push(grid(0,0,W,s,a,g).concat(grid(0,s+g,W,H-s-g,b,g)));
       });
-
-  return out;
-}
-
-function best(W,H,os,g){
-  var c=os.map(function(o){
-    return grid(0,0,W,H,o,g)
-  });
-
-  if(os.length===2){
-
-    [[os[0],os[1]],[os[1],os[0]]].forEach(function(p){
-
-      var a=p[0],b=p[1],k,s;
-
-      for(k=1;k<600&&(s=k*(a[0]+g)-g)<=W+E;k++)
-        c.push(
-          grid(0,0,s,H,a,g).concat(
-            grid(s+g,0,W-s-g,H,b,g)
-          )
-        );
-
-      for(k=1;k<600&&(s=k*(a[1]+g)-g)<=H+E;k++)
-        c.push(
-          grid(0,0,W,s,a,g).concat(
-            grid(0,s+g,W,H-s-g,b,g)
-          )
-        );
-
+    }
+    return c.reduce(function(m,x){return x.length>m.length?x:m},[]);
+  }
+  function show(msg,bad){var m=$("msg");m.textContent=msg;m.className=bad?"note err":"note"}
+  function calc(){
+    var W=num("sw"),L=num("sl"),cw=num("cw"),cl=num("cl"),trim=0,gap=0,qty=num("qty");
+    var sheetLongIsY=L>=W,pieceLongIsL=cl>=cw;
+    var gv=$("grain").value;
+    if(gv==="auto")gv=L>=W?"long":"short";
+    var ga=(gv==="long")===sheetLongIsY?"y":"x";
+    $("gdetect").textContent=(W>0&&L>0)?($("grain").value==="auto"?"Detected ":"Set manually: ")+gv+" grain, running along the "+(ga==="y"?L:W)+" side.":"";
+    var rg=$("cgrain").value,req=rg==="any"?"any":((rg==="long")===pieceLongIsL?"l":"w");
+    $("viz").innerHTML="";$("legend").innerHTML="";
+    if(![W,L,cw,cl].every(function(v){return isFinite(v)&&v>0})){$("n").textContent="0";$("waste").textContent="0%";$("need").textContent="–";show("Enter the sheet size and the cut size.",false);return}
+    if(trim<0)trim=0;if(gap<0)gap=0;
+    var Wu=W-2*trim,Hu=L-2*trim;
+    function plan(g2){
+      var rq=g2==="any"?"any":((g2==="long")===pieceLongIsL?"l":"w");
+      var a=rq==="any"||(rq==="l"&&ga==="y")||(rq==="w"&&ga==="x"),b=rq==="any"||(rq==="l"&&ga==="x")||(rq==="w"&&ga==="y"),o=[];
+      if(a)o.push([cw,cl,0]);
+      if(b)o.push([cl,cw,1]);
+      return {okA:a,okB:b,os:o,r:Wu>0&&Hu>0?best(Wu,Hu,o,gap):[]};
+    }
+    var chosen=rg,autoTxt="";
+    if(rg==="auto"){
+      var pl=plan("long"),ps=plan("short");
+      chosen=ps.r.length>pl.r.length?"short":"long";
+      autoTxt="Auto picked "+chosen+" grain ("+pl.r.length+" pieces with long grain, "+ps.r.length+" with short grain). ";
+    }
+    var P=plan(chosen),okA=P.okA,okB=P.okB,os=P.os,r=P.r;
+    var n=r.length;
+    $("n").textContent=n;
+    var used=n*cw*cl;
+    $("waste").textContent=(n?((1-used/(W*L))*100).toFixed(1):"100")+"%";
+    $("need").textContent=(qty>0&&n>0)?Math.ceil(qty/n):"–";
+    if(!n){show("The cut doesn’t fit on the sheet with this grain rule.",true)}
+    else{
+      var rot=r.filter(function(p){return p.t===1}).length;
+      var txt=okA&&okB?(rot===0?"Best layout keeps every piece the same way round.":(rot===n?"Best layout turns every piece through 90°.":"Best layout mixes both orientations ("+(n-rot)+" upright, "+rot+" turned)."))
+        :(okA?"The grain rule fixes the orientation: pieces are cut the same way round.":"The grain rule fixes the orientation: pieces are turned 90° on the sheet.");
+      if(qty>0)txt+=" "+qty+" pieces need "+Math.ceil(qty/n)+" sheets.";
+      show(autoTxt+txt,false);
+    }
+    var pad=Math.max(W,L)*0.04,s=Math.max(W,L)/45;
+    var pat=ga==="y"?'<line x1="'+s/2+'" y1="0" x2="'+s/2+'" y2="'+s+'"/>':'<line x1="0" y1="'+s/2+'" x2="'+s+'" y2="'+s/2+'"/>';
+    var svg='<svg viewBox="'+(-pad)+' '+(-pad)+' '+(W+2*pad)+' '+(L+2*pad)+'" role="img" aria-label="Cutting layout">'
+      +'<defs><pattern id="gr" class="pat" width="'+s+'" height="'+s+'" patternUnits="userSpaceOnUse">'+pat+'</pattern></defs>'
+      +'<rect class="sheet" x="0" y="0" width="'+W+'" height="'+L+'" vector-effect="non-scaling-stroke"/>'
+      +(trim>0?'<rect class="usable" x="'+trim+'" y="'+trim+'" width="'+Wu+'" height="'+Hu+'" vector-effect="non-scaling-stroke"/>':'')
+      +'<rect x="0" y="0" width="'+W+'" height="'+L+'" fill="url(#gr)"/>';
+    r.forEach(function(p){
+      var x=p.x+trim,y=p.y+trim;
+      svg+='<rect class="p'+p.t+'" x="'+x+'" y="'+y+'" width="'+p.w+'" height="'+p.h+'" fill-opacity=".85" vector-effect="non-scaling-stroke"/>'
+         +'<rect x="'+x+'" y="'+y+'" width="'+p.w+'" height="'+p.h+'" fill="url(#gr)"/>';
     });
+    $("viz").innerHTML=svg+'</svg>';
+    var lg='<span>Fine lines show the grain, running '+(ga==="y"?"top to bottom":"left to right")+' on the sheet.</span>';
+    if(os.length===2)lg='<span><i class="sw" style="background:var(--piece)"></i>Upright</span><span><i class="sw" style="background:var(--piece2)"></i>Turned 90°</span>'+lg;
+    $("legend").innerHTML=lg;
   }
-
-  return c.reduce(function(m,x){
-    return x.length>m.length?x:m
-  },[]);
-}
-
-function show(msg,bad){
-  var m=$("msg");
-  m.textContent=msg;
-  m.className=bad?"note err":"note";
-}
-
-function calc(){
-
-  var W=num("sw"),
-      L=num("sl"),
-      cw=num("cw"),
-      cl=num("cl"),
-      trim=0,
-      gap=0,
-      qty=num("qty");
-
-  var sheetLongIsY=L>=W;
-  var pieceLongIsL=cl>=cw;
-
-  var ga=($("grain").value==="long")===sheetLongIsY?"y":"x";
-
-  var rg=$("cgrain").value;
-  var req=rg==="any"?"any":
-    ((rg==="long")===pieceLongIsL?"l":"w");
-
-  $("viz").innerHTML="";
-  $("legend").innerHTML="";
-
-  if(![W,L,cw,cl].every(function(v){
-    return isFinite(v)&&v>0
-  })){
-    $("n").textContent="0";
-    $("waste").textContent="0%";
-    $("need").textContent="–";
-    show("Enter the sheet size and the cut size.",false);
-    return;
-  }
-
-  if(trim<0)trim=0;
-  if(gap<0)gap=0;
-
-  var Wu=W-2*trim;
-  var Hu=L-2*trim;
-
-  var okA=req==="any"||(req==="l"&&ga==="y")||(req==="w"&&ga==="x");
-  var okB=req==="any"||(req==="l"&&ga==="x")||(req==="w"&&ga==="y");
-
-  var os=[];
-
-  if(okA)os.push([cw,cl,0]);
-  if(okB)os.push([cl,cw,1]);
-
-  var r=Wu>0&&Hu>0?best(Wu,Hu,os,gap):[];
-  var n=r.length;
-
-  $("n").textContent=n;
-
-  var used=n*cw*cl;
-
-  $("waste").textContent=
-    (n?((1-used/(W*L))*100).toFixed(1):"100")+"%";
-
-  $("need").textContent=
-    (qty>0&&n>0)?Math.ceil(qty/n):"–";
-
-  if(!n){
-    show("The cut doesn’t fit on the sheet with this grain rule.",true);
-  }else{
-
-    var rot=r.filter(function(p){
-      return p.t===1
-    }).length;
-
-    var txt=okA&&okB?
-      (rot===0?
-        "Best layout keeps every piece the same way round.":
-        (rot===n?
-          "Best layout turns every piece through 90°.":
-          "Best layout mixes both orientations ("+(n-rot)+" upright, "+rot+" turned)."
-        )
-      ):
-      (okA?
-        "The grain rule fixes the orientation: pieces are cut the same way round.":
-        "The grain rule fixes the orientation: pieces are turned 90° on the sheet."
-      );
-
-    if(qty>0)txt+=" "+qty+" pieces need "+Math.ceil(qty/n)+" sheets.";
-
-    show(txt,false);
-  }
-
-  var pad=Math.max(W,L)*0.04;
-  var s=Math.max(W,L)/45;
-
-  var pat=ga==="y"?
-    '<line x1="'+s/2+'" y1="0" x2="'+s/2+'" y2="'+s+'"/>':
-    '<line x1="0" y1="'+s/2+'" x2="'+s+'" y2="'+s/2+'"/>';
-
-  var svg=
-    '<svg viewBox="'+(-pad)+' '+(-pad)+' '+(W+2*pad)+' '+(L+2*pad)+'" role="img" aria-label="Cutting layout">'+
-    '<defs><pattern id="gr" class="pat" width="'+s+'" height="'+s+'" patternUnits="userSpaceOnUse">'+pat+'</pattern></defs>'+
-    '<rect class="sheet" x="0" y="0" width="'+W+'" height="'+L+'" vector-effect="non-scaling-stroke"/>'+
-    (trim>0?
-      '<rect class="usable" x="'+trim+'" y="'+trim+'" width="'+Wu+'" height="'+Hu+'" vector-effect="non-scaling-stroke"/>':
-      ''
-    )+
-    '<rect x="0" y="0" width="'+W+'" height="'+L+'" fill="url(#gr)"/>';
-
-  r.forEach(function(p){
-
-    var x=p.x+trim;
-    var y=p.y+trim;
-
-    svg+=
-      '<rect class="p'+p.t+'" x="'+x+'" y="'+y+'" width="'+p.w+'" height="'+p.h+'" fill-opacity=".85" vector-effect="non-scaling-stroke"/>'+
-      '<rect x="'+x+'" y="'+y+'" width="'+p.w+'" height="'+p.h+'" fill="url(#gr)"/>';
-
-  });
-
-  $("viz").innerHTML=svg+'</svg>';
-
-  var lg=
-    '<span>Fine lines show the grain, running '+
-    (ga==="y"?"top to bottom":"left to right")+
-    ' on the sheet.</span>';
-
-  if(os.length===2){
-    lg=
-      '<span><i class="sw" style="background:var(--piece)"></i>Upright</span>'+
-      '<span><i class="sw" style="background:var(--piece2)"></i>Turned 90°</span>'+
-      lg;
-  }
-
-  $("legend").innerHTML=lg;
-}
-
-["sw","sl","grain","cw","cl","cgrain","qty"].forEach(function(id){
-  $(id).addEventListener("input",calc);
-  $(id).addEventListener("change",calc);
-});
-
-calc();
-
+  ["sw","sl","grain","cw","cl","cgrain","qty"].forEach(function(id){$(id).addEventListener("input",calc);$(id).addEventListener("change",calc)});
+  $("print").addEventListener("click",function(){try{window.print()}catch(e){}});
+  calc();
 })();
 </script>
-
 </body>
 </html>
