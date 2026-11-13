@@ -42,6 +42,26 @@ svg{width:100%;height:auto;max-height:560px;display:block}
 .brand h1{color:#fff;margin:0;font-size:1.25rem;padding-left:16px;border-left:1px solid #3a4a6e}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .brand{background:#0a101c}}
 :root[data-theme="dark"] .brand{background:#0a101c}
+.summary{display:none}
+dl{margin:0}
+dt{color:var(--muted);font-size:.8rem;margin-top:10px}
+dd{margin:0;font-size:1.1rem;font-weight:800}
+.dim{fill:var(--ink);font-weight:600}
+.grn{fill:var(--grain);font-weight:800;letter-spacing:.1em}
+.plab{fill:var(--ink);font-weight:600;stroke:var(--surface);paint-order:stroke}
+@media (max-width:760px){
+main{padding:16px 12px 32px}
+.panel{padding:16px}
+.brand{gap:10px 12px}
+.brand h1{order:3;flex:1 1 100%;font-size:1.05rem;padding-left:0;border-left:0}
+.printbtn{padding:10px 14px}
+input,select,.printbtn{min-height:44px}
+.stats{grid-template-columns:repeat(3,1fr);gap:10px}
+.stat .v{font-size:1.6rem}
+.stat .k{font-size:.75rem}
+svg{max-height:75vh}
+.legend{font-size:.8rem;gap:8px 14px}
+}
 .printbtn{margin-left:auto;font:inherit;font-weight:600;padding:9px 16px;border-radius:6px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer}
 .printbtn:focus-visible{outline:3px solid #fff;outline-offset:2px}
 @page{size:A4 landscape;margin:8mm}
@@ -65,6 +85,13 @@ hr{margin:2px 0 10px}
 .stat .v{font-size:1.6rem}
 .note{margin-bottom:8px;font-size:11px}
 svg{max-height:100mm}
+.inputs{display:none}
+.summary{display:block}
+.summary h2{font-size:1rem;margin-bottom:0}
+dt{font-size:10px;margin-top:8px}
+dd{font-size:15px}
+.stat .v{font-size:2rem}
+.stat .k{font-size:11px}
 .legend{margin-top:6px}
 }
 </style>
@@ -74,7 +101,7 @@ svg{max-height:100mm}
 <main>
 <p class="hint">Sizes are in mm. Enter the sheet as width × length: the last number is the grain direction, so 640 × 915 is long grain and 915 × 640 is short grain.</p>
 <div class="grid">
-  <section class="panel" aria-label="Inputs">
+  <section class="panel inputs" aria-label="Inputs">
     <h2>Parent sheet</h2>
     <div class="row">
       <div><label for="sw">Width</label><input id="sw" type="number" inputmode="decimal" min="0" value="640"></div>
@@ -94,6 +121,7 @@ svg{max-height:100mm}
     <label for="qty">Pieces required (optional)</label>
     <input id="qty" type="number" inputmode="numeric" min="0" placeholder="e.g. 5000">
   </section>
+  <section class="panel summary" id="summary" aria-label="Job details"></section>
   <section class="panel" aria-label="Result">
     <div class="stats">
       <div class="stat"><div class="v" id="n">0</div><div class="k">pieces per sheet</div></div>
@@ -138,7 +166,7 @@ svg{max-height:100mm}
     var ga=(gv==="long")===sheetLongIsY?"y":"x";
     $("gdetect").textContent=(W>0&&L>0)?($("grain").value==="auto"?"Detected ":"Set manually: ")+gv+" grain, running along the "+(ga==="y"?L:W)+" side.":"";
     var rg=$("cgrain").value,req=rg==="any"?"any":((rg==="long")===pieceLongIsL?"l":"w");
-    $("viz").innerHTML="";$("legend").innerHTML="";
+    $("viz").innerHTML="";$("legend").innerHTML="";$("summary").innerHTML="";
     if(![W,L,cw,cl].every(function(v){return isFinite(v)&&v>0})){$("n").textContent="0";$("waste").textContent="0%";$("need").textContent="–";show("Enter the sheet size and the cut size.",false);return}
     if(trim<0)trim=0;if(gap<0)gap=0;
     var Wu=W-2*trim,Hu=L-2*trim;
@@ -169,7 +197,7 @@ svg{max-height:100mm}
       if(qty>0)txt+=" "+qty+" pieces need "+Math.ceil(qty/n)+" sheets.";
       show(autoTxt+txt,false);
     }
-    var pad=Math.max(W,L)*0.04,s=Math.max(W,L)/45;
+    var pad=Math.max(W,L)*0.1,s=Math.max(W,L)/45,fs=Math.max(W,L)/34;
     var pat=ga==="y"?'<line x1="'+s/2+'" y1="0" x2="'+s/2+'" y2="'+s+'"/>':'<line x1="0" y1="'+s/2+'" x2="'+s+'" y2="'+s/2+'"/>';
     var svg='<svg viewBox="'+(-pad)+' '+(-pad)+' '+(W+2*pad)+' '+(L+2*pad)+'" role="img" aria-label="Cutting layout">'
       +'<defs><pattern id="gr" class="pat" width="'+s+'" height="'+s+'" patternUnits="userSpaceOnUse">'+pat+'</pattern></defs>'
@@ -181,7 +209,16 @@ svg{max-height:100mm}
       svg+='<rect class="p'+p.t+'" x="'+x+'" y="'+y+'" width="'+p.w+'" height="'+p.h+'" fill-opacity=".85" vector-effect="non-scaling-stroke"/>'
          +'<rect x="'+x+'" y="'+y+'" width="'+p.w+'" height="'+p.h+'" fill="url(#gr)"/>';
     });
+    r.forEach(function(p){
+      if(p.w>fs*4.5&&p.h>fs*1.6)svg+='<text class="plab" x="'+(p.x+trim+p.w/2)+'" y="'+(p.y+trim+p.h/2)+'" font-size="'+(fs*.7)+'" stroke-width="'+(fs*.18)+'" text-anchor="middle" dominant-baseline="central">'+p.w+' × '+p.h+'</text>';
+    });
+    svg+='<text class="dim" x="'+(W/2)+'" y="'+(-pad*.4)+'" font-size="'+fs+'" text-anchor="middle">'+W+' mm</text>'
+      +'<text class="dim" transform="translate('+(-pad*.4)+' '+(L/2)+') rotate(-90)" font-size="'+fs+'" text-anchor="middle">'+L+' mm</text>'
+      +(ga==="y"?'<text class="grn" transform="translate('+(W+pad*.65)+' '+(L/2)+') rotate(90)" font-size="'+(fs*.85)+'" text-anchor="middle">← GRAIN →</text>':'<text class="grn" x="'+(W/2)+'" y="'+(L+pad*.75)+'" font-size="'+(fs*.85)+'" text-anchor="middle">← GRAIN →</text>');
     $("viz").innerHTML=svg+'</svg>';
+    var cap=function(t){return t.charAt(0).toUpperCase()+t.slice(1)},row=function(k,v){return '<dt>'+k+'</dt><dd>'+v+'</dd>'};
+    var cutGrain=rg==="any"?"Either way (no grain rule)":cap(chosen)+" grain"+(rg==="auto"?" (auto, most pieces)":"");
+    $("summary").innerHTML='<h2>Job details</h2><dl>'+row('Parent sheet',W+' × '+L+' mm')+row('Sheet grain',cap(gv)+' grain, along the '+(ga==="y"?L:W)+' mm side')+row('Cut size',cw+' × '+cl+' mm')+row('Cut grain',cutGrain)+(qty>0?row('Pieces required',qty):'')+row('Printed',new Date().toLocaleDateString('en-ZA'))+'</dl>';
     var lg='<span>Fine lines show the grain, running '+(ga==="y"?"top to bottom":"left to right")+' on the sheet.</span>';
     if(os.length===2)lg='<span><i class="sw" style="background:var(--piece)"></i>Upright</span><span><i class="sw" style="background:var(--piece2)"></i>Turned 90°</span>'+lg;
     $("legend").innerHTML=lg;
