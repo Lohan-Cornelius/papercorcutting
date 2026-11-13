@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,148 +6,544 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sheet cutting calculator</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&display=swap">
+
 <style>
-:root{--bg:#eef1f5;--surface:#fff;--ink:#14213d;--muted:#5b6578;--line:#cfd6e2;--accent:#e4572e;--accent-ink:#fff;--piece:#c9dcf5;--piece2:#f6d3c6;--grain:#5b7fb0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1624;--surface:#182136;--ink:#e8edf7;--muted:#9aa5ba;--line:#2c3856;--accent:#ff7a52;--accent-ink:#1a1006;--piece:#27456f;--piece2:#6b3b2a;--grain:#7fa3d6;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#0f1624;--surface:#182136;--ink:#e8edf7;--muted:#9aa5ba;--line:#2c3856;--accent:#ff7a52;--accent-ink:#1a1006;--piece:#27456f;--piece2:#6b3b2a;--grain:#7fa3d6;color-scheme:dark}
+:root{
+  --bg:#eef1f5;
+  --surface:#fff;
+  --ink:#14213d;
+  --muted:#5b6578;
+  --line:#cfd6e2;
+  --accent:#e4572e;
+  --accent-ink:#fff;
+  --piece:#c9dcf5;
+  --piece2:#f6d3c6;
+  --grain:#5b7fb0;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light
+}
+
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1624;
+    --surface:#182136;
+    --ink:#e8edf7;
+    --muted:#9aa5ba;
+    --line:#2c3856;
+    --accent:#ff7a52;
+    --accent-ink:#1a1006;
+    --piece:#27456f;
+    --piece2:#6b3b2a;
+    --grain:#7fa3d6;
+    color-scheme:dark
+  }
+}
+
+:root[data-theme="dark]{
+  --bg:#0f1624;
+  --surface:#182136;
+  --ink:#e8edf7;
+  --muted:#9aa5ba;
+  --line:#2c3856;
+  --accent:#ff7a52;
+  --accent-ink:#1a1006;
+  --piece:#27456f;
+  --piece2:#6b3b2a;
+  --grain:#7fa3d6;
+  color-scheme:dark
+}
+
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"Archivo",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;line-height:1.4}
-main{max-width:1100px;margin:0 auto;padding:24px 16px 48px}
-h1{font-size:1.6rem;font-weight:800;margin:0 0 6px;letter-spacing:-.01em}
-.hint{color:var(--muted);font-size:.9rem;margin:0 0 20px}
-h2{font-size:1rem;font-weight:800;margin:4px 0 12px}
-.grid{display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:20px;align-items:start}
-@media (max-width:760px){.grid{grid-template-columns:1fr}}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px}
-label{display:block;font-size:.9rem;font-weight:600;margin:0 0 4px}
-input,select{width:100%;font:inherit;font-size:1rem;padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);margin-bottom:14px}
-input:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-hr{border:0;border-top:1px solid var(--line);margin:6px 0 16px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:16px;margin-bottom:16px}
-.stat .v{font-size:2.2rem;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
-.stat .k{color:var(--muted);font-size:.85rem;margin-top:4px}
-.note{color:var(--muted);font-size:.9rem;margin:0 0 14px}
-.err{color:var(--accent);font-weight:600}
-svg{width:100%;height:auto;max-height:560px;display:block}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"Archivo",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  line-height:1.4
+}
+
+main{
+  max-width:1100px;
+  margin:0 auto;
+  padding:24px 16px 48px
+}
+
+h1{
+  font-size:1.6rem;
+  font-weight:800;
+  margin:0 0 6px;
+  letter-spacing:-.01em
+}
+
+.hint{
+  color:var(--muted);
+  font-size:.9rem;
+  margin:0 0 20px
+}
+
+h2{
+  font-size:1rem;
+  font-weight:800;
+  margin:4px 0 12px
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:minmax(0,380px) minmax(0,1fr);
+  gap:20px;
+  align-items:start
+}
+
+@media (max-width:760px){
+  .grid{grid-template-columns:1fr}
+}
+
+.panel{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:20px
+}
+
+label{
+  display:block;
+  font-size:.9rem;
+  font-weight:600;
+  margin:0 0 4px
+}
+
+input,select{
+  width:100%;
+  font:inherit;
+  font-size:1rem;
+  padding:10px 12px;
+  border:1px solid var(--line);
+  border-radius:6px;
+  background:var(--bg);
+  color:var(--ink);
+  margin-bottom:14px
+}
+
+input:focus-visible,select:focus-visible{
+  outline:3px solid var(--accent);
+  outline-offset:2px
+}
+
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px
+}
+
+hr{
+  border:0;
+  border-top:1px solid var(--line);
+  margin:6px 0 16px
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+  gap:16px;
+  margin-bottom:16px
+}
+
+.stat .v{
+  font-size:2.2rem;
+  font-weight:800;
+  line-height:1;
+  font-variant-numeric:tabular-nums
+}
+
+.stat .k{
+  color:var(--muted);
+  font-size:.85rem;
+  margin-top:4px
+}
+
+.note{
+  color:var(--muted);
+  font-size:.9rem;
+  margin:0 0 14px
+}
+
+.err{
+  color:var(--accent);
+  font-weight:600
+}
+
+svg{
+  width:100%;
+  height:auto;
+  max-height:560px;
+  display:block
+}
+
 .sheet{fill:var(--surface);stroke:var(--ink)}
 .usable{fill:none;stroke:var(--muted);stroke-dasharray:6 5}
 .p0{fill:var(--piece);stroke:var(--ink)}
 .p1{fill:var(--piece2);stroke:var(--ink)}
 .pat line{stroke:var(--grain);stroke-width:1}
-.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.85rem;color:var(--muted);margin-top:10px}
-.sw{display:inline-block;width:12px;height:12px;border:1px solid var(--ink);vertical-align:-1px;margin-right:6px}
+
+.legend{
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+  font-size:.85rem;
+  color:var(--muted);
+  margin-top:10px
+}
+
+.sw{
+  display:inline-block;
+  width:12px;
+  height:12px;
+  border:1px solid var(--ink);
+  vertical-align:-1px;
+  margin-right:6px
+}
+
+/* PRINT ADJUSTMENTS */
+@media print{
+  @page{
+    size:A4 portrait;
+    margin:8mm;
+  }
+
+  body{
+    background:#fff;
+    color:#14213d;
+    print-color-adjust:exact;
+    -webkit-print-color-adjust:exact;
+  }
+
+  main{
+    padding:10px;
+    max-width:100%;
+  }
+
+  .grid{
+    gap:12px;
+    grid-template-columns:minmax(0,340px) minmax(0,1fr);
+  }
+
+  .panel{
+    padding:12px;
+    break-inside:avoid;
+  }
+
+  svg{
+    max-height:430px;
+    width:90%;
+    margin:0 auto;
+  }
+
+  h1{
+    font-size:1.4rem;
+  }
+
+  .hint{
+    margin-bottom:12px;
+  }
+}
 </style>
 </head>
+
 <body>
 <main>
 <h1>Sheet cutting calculator</h1>
 <p class="hint">Width runs across the page, length runs down it. Sizes are in mm.</p>
+
 <div class="grid">
-  <section class="panel" aria-label="Inputs">
-    <h2>Parent sheet</h2>
-    <div class="row">
-      <div><label for="sw">Width</label><input id="sw" type="number" inputmode="decimal" min="0" value="640"></div>
-      <div><label for="sl">Length</label><input id="sl" type="number" inputmode="decimal" min="0" value="900"></div>
-    </div>
-    <label for="grain">Grain direction</label>
-    <select id="grain"><option value="long">Long grain</option><option value="short">Short grain</option></select>
-    <hr>
-    <h2>Cut size</h2>
-    <div class="row">
-      <div><label for="cw">Width</label><input id="cw" type="number" inputmode="decimal" min="0" value="210"></div>
-      <div><label for="cl">Length</label><input id="cl" type="number" inputmode="decimal" min="0" value="297"></div>
-    </div>
-    <label for="cgrain">Grain required</label>
-    <select id="cgrain"><option value="long">Long grain</option><option value="short">Short grain</option><option value="any">Either (no grain rule)</option></select>
-    <label for="qty">Pieces required (optional)</label>
-    <input id="qty" type="number" inputmode="numeric" min="0" placeholder="e.g. 5000">
-  </section>
-  <section class="panel" aria-label="Result">
-    <div class="stats">
-      <div class="stat"><div class="v" id="n">0</div><div class="k">pieces per sheet</div></div>
-      <div class="stat"><div class="v" id="waste">0%</div><div class="k">waste</div></div>
-      <div class="stat"><div class="v" id="need">–</div><div class="k">sheets needed</div></div>
-    </div>
-    <p class="note" id="msg"></p>
-    <div id="viz"></div>
-    <div class="legend" id="legend"></div>
-  </section>
+
+<section class="panel" aria-label="Inputs">
+<h2>Parent sheet</h2>
+
+<div class="row">
+<div>
+<label for="sw">Width</label>
+<input id="sw" type="number" inputmode="decimal" min="0" value="640">
+</div>
+
+<div>
+<label for="sl">Length</label>
+<input id="sl" type="number" inputmode="decimal" min="0" value="900">
+</div>
+</div>
+
+<label for="grain">Grain direction</label>
+<select id="grain">
+<option value="long">Long grain</option>
+<option value="short">Short grain</option>
+</select>
+
+<hr>
+
+<h2>Cut size</h2>
+
+<div class="row">
+<div>
+<label for="cw">Width</label>
+<input id="cw" type="number" inputmode="decimal" min="0" value="210">
+</div>
+
+<div>
+<label for="cl">Length</label>
+<input id="cl" type="number" inputmode="decimal" min="0" value="297">
+</div>
+</div>
+
+<label for="cgrain">Grain required</label>
+<select id="cgrain">
+<option value="long">Long grain</option>
+<option value="short">Short grain</option>
+<option value="any">Either (no grain rule)</option>
+</select>
+
+<label for="qty">Pieces required (optional)</label>
+<input id="qty" type="number" inputmode="numeric" min="0" placeholder="e.g. 5000">
+</section>
+
+<section class="panel" aria-label="Result">
+
+<div class="stats">
+<div class="stat">
+<div class="v" id="n">0</div>
+<div class="k">pieces per sheet</div>
+</div>
+
+<div class="stat">
+<div class="v" id="waste">0%</div>
+<div class="k">waste</div>
+</div>
+
+<div class="stat">
+<div class="v" id="need">–</div>
+<div class="k">sheets needed</div>
+</div>
+</div>
+
+<p class="note" id="msg"></p>
+<div id="viz"></div>
+<div class="legend" id="legend"></div>
+
+</section>
 </div>
 </main>
+
 <script>
 (function(){
-  var $=function(id){return document.getElementById(id)};
-  var E=1e-9;
-  function num(id){return parseFloat($(id).value)}
-  function grid(x0,y0,W,H,o,g){
-    var out=[];
-    if(W<o[0]-E||H<o[1]-E)return out;
-    var c=Math.floor((W+g)/(o[0]+g)+E),r=Math.floor((H+g)/(o[1]+g)+E);
-    for(var i=0;i<c;i++)for(var j=0;j<r;j++)out.push({x:x0+i*(o[0]+g),y:y0+j*(o[1]+g),w:o[0],h:o[1],t:o[2]});
-    return out;
-  }
-  function best(W,H,os,g){
-    var c=os.map(function(o){return grid(0,0,W,H,o,g)});
-    if(os.length===2){
-      [[os[0],os[1]],[os[1],os[0]]].forEach(function(p){
-        var a=p[0],b=p[1],k,s;
-        for(k=1;k<600&&(s=k*(a[0]+g)-g)<=W+E;k++)c.push(grid(0,0,s,H,a,g).concat(grid(s+g,0,W-s-g,H,b,g)));
-        for(k=1;k<600&&(s=k*(a[1]+g)-g)<=H+E;k++)c.push(grid(0,0,W,s,a,g).concat(grid(0,s+g,W,H-s-g,b,g)));
+
+var $=function(id){return document.getElementById(id)};
+var E=1e-9;
+
+function num(id){
+  return parseFloat($(id).value)
+}
+
+function grid(x0,y0,W,H,o,g){
+  var out=[];
+
+  if(W<o[0]-E||H<o[1]-E)return out;
+
+  var c=Math.floor((W+g)/(o[0]+g)+E);
+  var r=Math.floor((H+g)/(o[1]+g)+E);
+
+  for(var i=0;i<c;i++)
+    for(var j=0;j<r;j++)
+      out.push({
+        x:x0+i*(o[0]+g),
+        y:y0+j*(o[1]+g),
+        w:o[0],
+        h:o[1],
+        t:o[2]
       });
-    }
-    return c.reduce(function(m,x){return x.length>m.length?x:m},[]);
-  }
-  function show(msg,bad){var m=$("msg");m.textContent=msg;m.className=bad?"note err":"note"}
-  function calc(){
-    var W=num("sw"),L=num("sl"),cw=num("cw"),cl=num("cl"),trim=0,gap=0,qty=num("qty");
-    var sheetLongIsY=L>=W,pieceLongIsL=cl>=cw;
-    var ga=($("grain").value==="long")===sheetLongIsY?"y":"x";
-    var rg=$("cgrain").value,req=rg==="any"?"any":((rg==="long")===pieceLongIsL?"l":"w");
-    $("viz").innerHTML="";$("legend").innerHTML="";
-    if(![W,L,cw,cl].every(function(v){return isFinite(v)&&v>0})){$("n").textContent="0";$("waste").textContent="0%";$("need").textContent="–";show("Enter the sheet size and the cut size.",false);return}
-    if(trim<0)trim=0;if(gap<0)gap=0;
-    var Wu=W-2*trim,Hu=L-2*trim;
-    var okA=req==="any"||(req==="l"&&ga==="y")||(req==="w"&&ga==="x");
-    var okB=req==="any"||(req==="l"&&ga==="x")||(req==="w"&&ga==="y");
-    var os=[];
-    if(okA)os.push([cw,cl,0]);
-    if(okB)os.push([cl,cw,1]);
-    var r=Wu>0&&Hu>0?best(Wu,Hu,os,gap):[];
-    var n=r.length;
-    $("n").textContent=n;
-    var used=n*cw*cl;
-    $("waste").textContent=(n?((1-used/(W*L))*100).toFixed(1):"100")+"%";
-    $("need").textContent=(qty>0&&n>0)?Math.ceil(qty/n):"–";
-    if(!n){show("The cut doesn’t fit on the sheet with this grain rule.",true)}
-    else{
-      var rot=r.filter(function(p){return p.t===1}).length;
-      var txt=okA&&okB?(rot===0?"Best layout keeps every piece the same way round.":(rot===n?"Best layout turns every piece through 90°.":"Best layout mixes both orientations ("+(n-rot)+" upright, "+rot+" turned)."))
-        :(okA?"The grain rule fixes the orientation: pieces are cut the same way round.":"The grain rule fixes the orientation: pieces are turned 90° on the sheet.");
-      if(qty>0)txt+=" "+qty+" pieces need "+Math.ceil(qty/n)+" sheets.";
-      show(txt,false);
-    }
-    var pad=Math.max(W,L)*0.04,s=Math.max(W,L)/45;
-    var pat=ga==="y"?'<line x1="'+s/2+'" y1="0" x2="'+s/2+'" y2="'+s+'"/>':'<line x1="0" y1="'+s/2+'" x2="'+s+'" y2="'+s/2+'"/>';
-    var svg='<svg viewBox="'+(-pad)+' '+(-pad)+' '+(W+2*pad)+' '+(L+2*pad)+'" role="img" aria-label="Cutting layout">'
-      +'<defs><pattern id="gr" class="pat" width="'+s+'" height="'+s+'" patternUnits="userSpaceOnUse">'+pat+'</pattern></defs>'
-      +'<rect class="sheet" x="0" y="0" width="'+W+'" height="'+L+'" vector-effect="non-scaling-stroke"/>'
-      +(trim>0?'<rect class="usable" x="'+trim+'" y="'+trim+'" width="'+Wu+'" height="'+Hu+'" vector-effect="non-scaling-stroke"/>':'')
-      +'<rect x="0" y="0" width="'+W+'" height="'+L+'" fill="url(#gr)"/>';
-    r.forEach(function(p){
-      var x=p.x+trim,y=p.y+trim;
-      svg+='<rect class="p'+p.t+'" x="'+x+'" y="'+y+'" width="'+p.w+'" height="'+p.h+'" fill-opacity=".85" vector-effect="non-scaling-stroke"/>'
-         +'<rect x="'+x+'" y="'+y+'" width="'+p.w+'" height="'+p.h+'" fill="url(#gr)"/>';
+
+  return out;
+}
+
+function best(W,H,os,g){
+  var c=os.map(function(o){
+    return grid(0,0,W,H,o,g)
+  });
+
+  if(os.length===2){
+
+    [[os[0],os[1]],[os[1],os[0]]].forEach(function(p){
+
+      var a=p[0],b=p[1],k,s;
+
+      for(k=1;k<600&&(s=k*(a[0]+g)-g)<=W+E;k++)
+        c.push(
+          grid(0,0,s,H,a,g).concat(
+            grid(s+g,0,W-s-g,H,b,g)
+          )
+        );
+
+      for(k=1;k<600&&(s=k*(a[1]+g)-g)<=H+E;k++)
+        c.push(
+          grid(0,0,W,s,a,g).concat(
+            grid(0,s+g,W,H-s-g,b,g)
+          )
+        );
+
     });
-    $("viz").innerHTML=svg+'</svg>';
-    var lg='<span>Fine lines show the grain, running '+(ga==="y"?"top to bottom":"left to right")+' on the sheet.</span>';
-    if(os.length===2)lg='<span><i class="sw" style="background:var(--piece)"></i>Upright</span><span><i class="sw" style="background:var(--piece2)"></i>Turned 90°</span>'+lg;
-    $("legend").innerHTML=lg;
   }
-  ["sw","sl","grain","cw","cl","cgrain","qty"].forEach(function(id){$(id).addEventListener("input",calc);$(id).addEventListener("change",calc)});
-  calc();
+
+  return c.reduce(function(m,x){
+    return x.length>m.length?x:m
+  },[]);
+}
+
+function show(msg,bad){
+  var m=$("msg");
+  m.textContent=msg;
+  m.className=bad?"note err":"note";
+}
+
+function calc(){
+
+  var W=num("sw"),
+      L=num("sl"),
+      cw=num("cw"),
+      cl=num("cl"),
+      trim=0,
+      gap=0,
+      qty=num("qty");
+
+  var sheetLongIsY=L>=W;
+  var pieceLongIsL=cl>=cw;
+
+  var ga=($("grain").value==="long")===sheetLongIsY?"y":"x";
+
+  var rg=$("cgrain").value;
+  var req=rg==="any"?"any":
+    ((rg==="long")===pieceLongIsL?"l":"w");
+
+  $("viz").innerHTML="";
+  $("legend").innerHTML="";
+
+  if(![W,L,cw,cl].every(function(v){
+    return isFinite(v)&&v>0
+  })){
+    $("n").textContent="0";
+    $("waste").textContent="0%";
+    $("need").textContent="–";
+    show("Enter the sheet size and the cut size.",false);
+    return;
+  }
+
+  if(trim<0)trim=0;
+  if(gap<0)gap=0;
+
+  var Wu=W-2*trim;
+  var Hu=L-2*trim;
+
+  var okA=req==="any"||(req==="l"&&ga==="y")||(req==="w"&&ga==="x");
+  var okB=req==="any"||(req==="l"&&ga==="x")||(req==="w"&&ga==="y");
+
+  var os=[];
+
+  if(okA)os.push([cw,cl,0]);
+  if(okB)os.push([cl,cw,1]);
+
+  var r=Wu>0&&Hu>0?best(Wu,Hu,os,gap):[];
+  var n=r.length;
+
+  $("n").textContent=n;
+
+  var used=n*cw*cl;
+
+  $("waste").textContent=
+    (n?((1-used/(W*L))*100).toFixed(1):"100")+"%";
+
+  $("need").textContent=
+    (qty>0&&n>0)?Math.ceil(qty/n):"–";
+
+  if(!n){
+    show("The cut doesn’t fit on the sheet with this grain rule.",true);
+  }else{
+
+    var rot=r.filter(function(p){
+      return p.t===1
+    }).length;
+
+    var txt=okA&&okB?
+      (rot===0?
+        "Best layout keeps every piece the same way round.":
+        (rot===n?
+          "Best layout turns every piece through 90°.":
+          "Best layout mixes both orientations ("+(n-rot)+" upright, "+rot+" turned)."
+        )
+      ):
+      (okA?
+        "The grain rule fixes the orientation: pieces are cut the same way round.":
+        "The grain rule fixes the orientation: pieces are turned 90° on the sheet."
+      );
+
+    if(qty>0)txt+=" "+qty+" pieces need "+Math.ceil(qty/n)+" sheets.";
+
+    show(txt,false);
+  }
+
+  var pad=Math.max(W,L)*0.04;
+  var s=Math.max(W,L)/45;
+
+  var pat=ga==="y"?
+    '<line x1="'+s/2+'" y1="0" x2="'+s/2+'" y2="'+s+'"/>':
+    '<line x1="0" y1="'+s/2+'" x2="'+s+'" y2="'+s/2+'"/>';
+
+  var svg=
+    '<svg viewBox="'+(-pad)+' '+(-pad)+' '+(W+2*pad)+' '+(L+2*pad)+'" role="img" aria-label="Cutting layout">'+
+    '<defs><pattern id="gr" class="pat" width="'+s+'" height="'+s+'" patternUnits="userSpaceOnUse">'+pat+'</pattern></defs>'+
+    '<rect class="sheet" x="0" y="0" width="'+W+'" height="'+L+'" vector-effect="non-scaling-stroke"/>'+
+    (trim>0?
+      '<rect class="usable" x="'+trim+'" y="'+trim+'" width="'+Wu+'" height="'+Hu+'" vector-effect="non-scaling-stroke"/>':
+      ''
+    )+
+    '<rect x="0" y="0" width="'+W+'" height="'+L+'" fill="url(#gr)"/>';
+
+  r.forEach(function(p){
+
+    var x=p.x+trim;
+    var y=p.y+trim;
+
+    svg+=
+      '<rect class="p'+p.t+'" x="'+x+'" y="'+y+'" width="'+p.w+'" height="'+p.h+'" fill-opacity=".85" vector-effect="non-scaling-stroke"/>'+
+      '<rect x="'+x+'" y="'+y+'" width="'+p.w+'" height="'+p.h+'" fill="url(#gr)"/>';
+
+  });
+
+  $("viz").innerHTML=svg+'</svg>';
+
+  var lg=
+    '<span>Fine lines show the grain, running '+
+    (ga==="y"?"top to bottom":"left to right")+
+    ' on the sheet.</span>';
+
+  if(os.length===2){
+    lg=
+      '<span><i class="sw" style="background:var(--piece)"></i>Upright</span>'+
+      '<span><i class="sw" style="background:var(--piece2)"></i>Turned 90°</span>'+
+      lg;
+  }
+
+  $("legend").innerHTML=lg;
+}
+
+["sw","sl","grain","cw","cl","cgrain","qty"].forEach(function(id){
+  $(id).addEventListener("input",calc);
+  $(id).addEventListener("change",calc);
+});
+
+calc();
+
 })();
 </script>
+
 </body>
 </html>
