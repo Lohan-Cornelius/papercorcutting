@@ -51,19 +51,15 @@ svg{width:100%;height:auto;max-height:560px;display:block}
       <div><label for="sl">Length</label><input id="sl" type="number" inputmode="decimal" min="0" value="900"></div>
     </div>
     <label for="grain">Grain direction</label>
-    <select id="grain"><option value="y">Along the length</option><option value="x">Along the width</option></select>
+    <select id="grain"><option value="long">Long grain</option><option value="short">Short grain</option></select>
     <hr>
     <h2>Cut size</h2>
     <div class="row">
       <div><label for="cw">Width</label><input id="cw" type="number" inputmode="decimal" min="0" value="210"></div>
       <div><label for="cl">Length</label><input id="cl" type="number" inputmode="decimal" min="0" value="297"></div>
     </div>
-    <label for="cgrain">Grain must run</label>
-    <select id="cgrain"><option value="l">Along the cut length</option><option value="w">Along the cut width</option><option value="any">Either way (no grain rule)</option></select>
-    <div class="row">
-      <div><label for="trim">Trim each edge</label><input id="trim" type="number" inputmode="decimal" min="0" value="0"></div>
-      <div><label for="gap">Gap between cuts</label><input id="gap" type="number" inputmode="decimal" min="0" value="0"></div>
-    </div>
+    <label for="cgrain">Grain required</label>
+    <select id="cgrain"><option value="long">Long grain</option><option value="short">Short grain</option><option value="any">Either (no grain rule)</option></select>
     <label for="qty">Pieces required (optional)</label>
     <input id="qty" type="number" inputmode="numeric" min="0" placeholder="e.g. 5000">
   </section>
@@ -104,8 +100,10 @@ svg{width:100%;height:auto;max-height:560px;display:block}
   }
   function show(msg,bad){var m=$("msg");m.textContent=msg;m.className=bad?"note err":"note"}
   function calc(){
-    var W=num("sw"),L=num("sl"),cw=num("cw"),cl=num("cl"),trim=num("trim")||0,gap=num("gap")||0,qty=num("qty");
-    var ga=$("grain").value,req=$("cgrain").value;
+    var W=num("sw"),L=num("sl"),cw=num("cw"),cl=num("cl"),trim=0,gap=0,qty=num("qty");
+    var sheetLongIsY=L>=W,pieceLongIsL=cl>=cw;
+    var ga=($("grain").value==="long")===sheetLongIsY?"y":"x";
+    var rg=$("cgrain").value,req=rg==="any"?"any":((rg==="long")===pieceLongIsL?"l":"w");
     $("viz").innerHTML="";$("legend").innerHTML="";
     if(![W,L,cw,cl].every(function(v){return isFinite(v)&&v>0})){$("n").textContent="0";$("waste").textContent="0%";$("need").textContent="–";show("Enter the sheet size and the cut size.",false);return}
     if(trim<0)trim=0;if(gap<0)gap=0;
@@ -121,7 +119,7 @@ svg{width:100%;height:auto;max-height:560px;display:block}
     var used=n*cw*cl;
     $("waste").textContent=(n?((1-used/(W*L))*100).toFixed(1):"100")+"%";
     $("need").textContent=(qty>0&&n>0)?Math.ceil(qty/n):"–";
-    if(!n){show("The cut doesn’t fit on the sheet with this grain rule, trim and gap.",true)}
+    if(!n){show("The cut doesn’t fit on the sheet with this grain rule.",true)}
     else{
       var rot=r.filter(function(p){return p.t===1}).length;
       var txt=okA&&okB?(rot===0?"Best layout keeps every piece the same way round.":(rot===n?"Best layout turns every piece through 90°.":"Best layout mixes both orientations ("+(n-rot)+" upright, "+rot+" turned)."))
@@ -146,7 +144,7 @@ svg{width:100%;height:auto;max-height:560px;display:block}
     if(os.length===2)lg='<span><i class="sw" style="background:var(--piece)"></i>Upright</span><span><i class="sw" style="background:var(--piece2)"></i>Turned 90°</span>'+lg;
     $("legend").innerHTML=lg;
   }
-  ["sw","sl","grain","cw","cl","cgrain","trim","gap","qty"].forEach(function(id){$(id).addEventListener("input",calc);$(id).addEventListener("change",calc)});
+  ["sw","sl","grain","cw","cl","cgrain","qty"].forEach(function(id){$(id).addEventListener("input",calc);$(id).addEventListener("change",calc)});
   calc();
 })();
 </script>
